@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Interactive Birthday 🎉</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', Arial, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      overflow-x: hidden;
+    }
+    section { padding: 80px 20px; text-align: center; }
+    h1 { font-size: clamp(2.2rem, 5vw, 3.5rem); }
+    h2 { font-size: clamp(1.6rem, 4vw, 2.5rem); margin-bottom: 20px; }
+    p { opacity: 0.9; }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.7)),
+        url('mutuku.jpg') center/cover no-repeat;
+      animation: fadeIn 1.5s ease;
+    }
+    .hero h1 { color: #fff; }
+    .hero p { max-width: 600px; color: #eee; }
+    .hero button {
+      margin-top: 30px;
+      padding: 15px 35px;
+      border-radius: 40px;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      background: #ff4b2b;
+      color: #fff;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .hero button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    /* CARDS */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 25px;
+      margin-top: 50px;
+    }
+    .card {
+      background: rgba(255,255,255,0.12);
+      padding: 30px;
+      border-radius: 22px;
+      backdrop-filter: blur(8px);
+      cursor: pointer;
+      transition: transform 0.4s, background 0.4s;
+    }
+    .card:hover {
+      transform: translateY(-12px) scale(1.02);
+      background: rgba(255,255,255,0.22);
+    }
+
+    /* QUOTES */
+    .quotes { background: #0b1220; }
+    .quote-category { margin-bottom: 50px; }
+    .quote {
+      font-style: italic;
+      max-width: 750px;
+      margin: 12px auto;
+      animation: slideUp 1s ease;
+    }
+
+    /* GALLERY */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 18px;
+      margin-top: 35px;
+    }
+    .gallery-grid img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 18px;
+      transition: transform 0.4s;
+    }
+    .gallery-grid img:hover { transform: scale(1.08); }
+
+    /* GIFT BOX */
+    .gift-box {
+      width: 160px;
+      height: 160px;
+      margin: 50px auto 20px;
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+      border-radius: 14px;
+      position: relative;
+      cursor: pointer;
+      animation: bounce 2s infinite;
+    }
+    .gift-box::before {
+      content: '';
+      position: absolute;
+      width: 26px;
+      height: 160px;
+      background: #fff;
+      left: 67px;
+    }
+    .gift-box::after {
+      content: '🎀';
+      position: absolute;
+      font-size: 3rem;
+      top: -40px;
+      left: 52px;
+    }
+    .gift-message {
+      display: none;
+      font-size: 1.3rem;
+      margin-top: 20px;
+      animation: fadeIn 1s ease;
+    }
+
+    #ageReveal { animation: pop 1s ease; }
+
+    /* GUESTBOOK */
+    #guestbook input, #guestbook textarea {
+      padding: 12px;
+      border-radius: 12px;
+      border: none;
+      width: 280px;
+      max-width: 90%;
+      margin-bottom: 15px;
+    }
+    #guestbook button {
+      padding: 14px 30px;
+      border-radius: 30px;
+      border: none;
+      cursor: pointer;
+      background: #25D366;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    footer { background: #000; padding: 30px; opacity: 0.85; }
+
+    /* ANIMATIONS */
+    @keyframes bounce {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-18px); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pop {
+      from { transform: scale(0.5); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    /* MOBILE */
+    @media (max-width: 600px) {
+      section { padding: 60px 15px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>🎂 Happy Birthday to Me 🎉</h1>
+    <p>Celebrating a year of growth, resilience, dreams, and unforgettable moments.</p>
+    <button onclick="document.getElementById('year').scrollIntoView({behavior:'smooth'})">Explore My Year</button>
+    <div id="countdown" style="margin-top:20px;font-size:1.3rem;color:#fff;"></div>
+    <div id="ageReveal" style="display:none;font-size:2rem;margin-top:15px;color:#fff;"></div>
+  </section>
+
+<!-- YEAR REFLECTION -->
+<section id="year">
+  <h2>📖 My Year in Reflection</h2>
+  <p style="max-width:800px;margin:0 auto;opacity:0.9;">
+    This year tested me, shaped me, and taught me powerful lessons.  
+    Here’s a reflection of my achievements, challenges, solutions, and my vision for the new year ahead.
+  </p>
+
+  <div class="cards">
+
+    <!-- ACHIEVEMENTS -->
+    <div class="card">
+      <h3>🏆 My Achievements</h3>
+      <p>
+        Built and improved digital projects, strengthened my skills in web development,  
+        explored smart agriculture and business platforms, and stayed committed to personal growth.
+      </p>
+    </div>
+
+    <!-- CHALLENGES -->
+    <div class="card">
+      <h3>⚡ Challenges I Faced</h3>
+      <p>
+        Financial pressure, time management struggles, moments of self-doubt,  
+        academic stress, and balancing dreams with real-life responsibilities.
+      </p>
+    </div>
+
+    <!-- SOLUTIONS -->
+    <div class="card">
+      <h3>🛠️ My Planned Solutions</h3>
+      <p>
+        Improving discipline, focusing on consistency, learning smarter—not harder,  
+        seeking collaboration, and prioritizing mental and physical well-being.
+      </p>
+    </div>
+
+    <!-- NEW YEAR PLAN -->
+    <div class="card">
+      <h3>🚀 My New Year Plan</h3>
+      <p>
+        Build impactful digital products, grow financially, sharpen my skills daily,  
+        protect my peace, help others grow, and boldly chase the life I envision.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+
+  <!-- QUOTES -->
+  <section class="quotes">
+    <h2>💬 Quotes That Shaped My Year</h2>
+    <div class="quote-category">
+      <h3>🌱 Growth</h3>
+      <p class="quote">“Every small step counted.”</p>
+      <p class="quote">“Consistency changed my life.”</p>
+    </div>
+    <div class="quote-category">
+      <h3>🔥 Resilience</h3>
+      <p class="quote">“I survived what I once feared.”</p>
+      <p class="quote">“Strength showed up when I didn’t expect it.”</p>
+    </div>
+    <div class="quote-category">
+      <h3>🚀 Dreams</h3>
+      <p class="quote">“This year prepared me for what’s next.”</p>
+      <p class="quote">“I’m becoming who I dreamed of.”</p>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section>
+    <h2>📸 My Favorite Moments of the Year</h2>
+    <div class="gallery-grid">
+      <img src="IMAGE 1.jpeg" />
+      <img src="james.jpeg" />
+      <img src="jay.jpg" />
+      <img src="mutuku.jpg" />
+    </div>
+  </section>
+
+  <!-- GIFT -->
+  <section>
+    <h2>🎁 A Birthday Surprise</h2>
+    <div class="gift-box" onclick="openGift()"></div>
+    <div id="giftMessage" class="gift-message">✨ The greatest gift is how far I’ve come — and the future ahead ✨</div>
+  </section>
+
+  <!-- GUESTBOOK -->
+  <section id="guestbook">
+    <h2>✍️ Leave a Birthday Wish</h2>
+    <p>Your message will be sent directly to my WhatsApp 💚</p>
+    <input id="guestName" placeholder="Your Name" />
+    <textarea id="wishMessage" placeholder="Your Birthday Message" rows="4"></textarea>
+    <br>
+    <button onclick="sendWish()">Send Wish 💬</button>
+  </section>
+
+  <footer>
+    <p>Made with ❤️ to celebrate my journey</p>
+  </footer>
+
+  <script>
+    function openGift() {
+      const gift = document.getElementById('giftMessage');
+      gift.style.display = 'block';
+      document.querySelector('.gift-box').style.animation = 'none';
+    }
+
+    function sendWish() {
+      const name = document.getElementById('guestName').value;
+      const message = document.getElementById('wishMessage').value;
+      if (!name || !message) {
+        alert('Please enter your name and message');
+        return;
+      }
+      const phoneNumber = '254795077967'; 
+      const text = encodeURIComponent(`🎉 Birthday Wish 🎂\nFrom: ${name}\n\n${message}`);
+      window.open(`https://wa.me/${phoneNumber}?text=${text}`, '_blank');
+    }
+
+    const birthdayDate = new Date('2025-12-15T00:00:00'); 
+    const birthYear = 2004;
+
+    function updateCountdown() {
+      const now = new Date();
+      const diff = birthdayDate - now;
+      if (diff <= 0) {
+        document.getElementById('countdown').style.display = 'none';
+        const age = new Date().getFullYear() - birthYear;
+        document.getElementById('ageReveal').innerHTML = `🎉 I’m officially <strong>${age}</strong> today! 🎉`;
+        document.getElementById('ageReveal').style.display = 'block';
+        return;
+      }
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / (1000 * 60)) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+      document.getElementById('countdown').innerHTML = `⏳ Birthday Countdown: ${d}d ${h}h ${m}m ${s}s`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+
+</body>
+</html>
