@@ -102,6 +102,31 @@
     border-radius: 12px;
   }
 }
+     .video-wrapper {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.video-wrapper video {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.mute-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+}
     /* GIFT BOX */
     .gift-box {
       width: 160px;
@@ -180,6 +205,27 @@
     @media (max-width: 600px) {
       section { padding: 60px 15px; }
     }
+        @media (max-width: 600px) {
+  .gift-box {
+    width: 120px;
+    height: 120px;
+  }
+
+  .gift-box::before {
+    height: 120px;
+    left: 47px;
+  }
+
+  .gift-box::after {
+    font-size: 2.2rem;
+    left: 36px;
+  }
+
+  .gift-message {
+    font-size: 1rem;
+    padding: 0 10px;
+  }
+}
   </style>
 </head>
 <body>
@@ -191,6 +237,7 @@
     <button onclick="document.getElementById('year').scrollIntoView({behavior:'smooth'})">Explore My Year</button>
     <div id="countdown" style="margin-top:20px;font-size:1.3rem;color:#fff;"></div>
     <div id="ageReveal" style="display:none;font-size:2rem;margin-top:15px;color:#fff;"></div>
+    <div id="nextYearCountdown" style="margin-top:10px;font-size:1.1rem;opacity:0.85;"></div>
   </section>
 
 <!-- YEAR REFLECTION -->
@@ -273,7 +320,18 @@
       <img src="mutuku.jpg" />
     </div>
   </section>
+<!-- VIDEO MEMORY -->
+<section class="video-section">
+  <h2>🎥 A Moment That Meant Everything</h2>
 
+  <div class="video-container">
+    <video id="galleryVideo" autoplay loop muted playsinline>
+      <source src="Download (28).mp4" type="video/mp4">
+    </video>
+
+    <button class="mute-btn" onclick="toggleMute()">🔇</button>
+  </div>
+</section>
   <!-- GIFT -->
   <section>
     <h2>🎁 A Birthday Surprise</h2>
@@ -290,6 +348,23 @@
     <br>
     <button onclick="sendWish()">Send Wish 💬</button>
   </section>
+    <section>
+  <h2>🎯 My Vision Going Forward</h2>
+  <div class="cards">
+    <div class="card">
+      <h3>💻 Career</h3>
+      <p>Build impactful digital products and grow as a professional software engineer.</p>
+    </div>
+    <div class="card">
+      <h3>💰 Finance</h3>
+      <p>Create sustainable income streams and achieve financial independence.</p>
+    </div>
+    <div class="card">
+      <h3>🧠 Well-being</h3>
+      <p>Protect mental peace, maintain health, and nurture meaningful relationships.</p>
+    </div>
+  </div>
+</section>
 
   <footer>
     <p>Made with ❤️ to celebrate my journey</p>
@@ -336,8 +411,32 @@
 
     setInterval(updateCountdown, 1000);
     updateCountdown();
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+      const nextYearBirthday = new Date('2026-12-15T00:00:00');
+
+  function updateNextYearCountdown() {
+    const now = new Date();
+    let months =
+      (nextYearBirthday.getFullYear() - now.getFullYear()) * 12 +
+      (nextYearBirthday.getMonth() - now.getMonth());
+
+    if (months < 0) months = 0;
+
+    document.getElementById('nextYearCountdown').innerHTML =
+      `📆 Next Year Countdown: <strong>${months}</strong> months to go`;
+  }
+
+  setInterval(updateNextYearCountdown, 60000);
+  updateNextYearCountdown();
+  function toggleMute() {
+  const video = document.getElementById('galleryVideo');
+  video.muted = !video.muted;
+}
+
   </script>
 
 </body>
 </html>
+
 
